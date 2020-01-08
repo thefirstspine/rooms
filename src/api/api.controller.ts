@@ -1,11 +1,13 @@
-import { Controller, Get, UseGuards, Param, Post, Body, Req } from '@nestjs/common';
+import { Controller, Get, UseGuards, Param, Post, Body, Req, HttpException } from '@nestjs/common';
 import { AuthGuard } from '../@shared/auth-shared/auth.guard';
-import { IPublicRoom } from '../room/room.entity';
-import { ISubject } from '../subjects/subjects.service';
+import { IPublicRoom, Room } from '../room/room.entity';
+import { ISubject, SubjectsService } from '../subjects/subjects.service';
 import { ApiService } from './api.service';
 import { CreateRoomDto } from './create-room.dto';
 import { CreateMessageDto } from './create-message.dto';
 import { IPublicMessage } from '../messages/message.entity';
+import { AuthService } from '../@shared/auth-shared/auth.service';
+import { Request } from 'express';
 
 /**
  * Main public controller.
@@ -15,6 +17,8 @@ export class ApiController {
 
   constructor(
     private readonly apiService: ApiService,
+    private readonly authService: AuthService,
+    private readonly subjectsService: SubjectsService,
   ) {}
 
   @Get('subjects')
@@ -37,8 +41,15 @@ export class ApiController {
 
   @Post('subjects/:subjectName/rooms')
   @UseGuards(AuthGuard)
-  async createRoom(@Param() params, @Body() createRoomDto: CreateRoomDto): Promise<IPublicRoom> {
-    // TODO: only authorize the subject's user
+  async createRoom(@Req() request: Request, @Param() params, @Body() createRoomDto: CreateRoomDto): Promise<IPublicRoom> {
+    // Only authorize the subject's owner
+    const jwt: string = request.headers.authorization.replace(/Bearer /, '');
+    const user: number = await this.authService.login(jwt);
+    const subject: ISubject = this.subjectsService.getSubject(params.subjectName);
+    if (user !== subject.owner) {
+      throw new HttpException('Not the owner of the subject', 403);
+    }
+
     return this.apiService.createRoom(params.subjectName, createRoomDto);
   }
 
