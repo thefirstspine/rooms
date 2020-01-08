@@ -4,6 +4,7 @@ import { SubjectsService, ISubject } from '../subjects/subjects.service';
 import { IPublicRoom, Room } from '../room/room.entity';
 import { IPublicMessage, Message } from '../messages/message.entity';
 import { MessagesService } from '../messages/messages.service';
+import { IPublicRoomSender } from '../room/room-sender.entity';
 
 /**
  * Main service to respond to API requests.
@@ -52,11 +53,16 @@ export class ApiService {
    * @param subjectName
    * @param room
    */
-  async createRoom(subjectName: string, room: {name: string}): Promise<IPublicRoom> {
+  async createRoom(
+    subjectName: string,
+    room: {
+      name: string,
+      senders: IPublicRoomSender[],
+    }): Promise<IPublicRoom> {
     this.getSubject(subjectName); // test the subject existence
 
     // Create the room & test
-    const roomCreated: Room|null = await this.roomService.createRoom(subjectName, room.name);
+    const roomCreated: Room|null = await this.roomService.createRoom(subjectName, room.name, room.senders);
     if (!roomCreated) {
       throw new HttpException('Room cannot be created', 400);
     }

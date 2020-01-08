@@ -10,10 +10,11 @@ import { Room } from './room/room.entity';
 import { SubjectsService } from './subjects/subjects.service';
 import { MessagesService } from './messages/messages.service';
 import { Message } from './messages/message.entity';
+import { RoomSender } from './room/room-sender.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Room, Message]),
+    TypeOrmModule.forFeature([Room, RoomSender, Message]),
     TypeOrmModule.forRoot({
       type: 'postgres',
       synchronize: true,

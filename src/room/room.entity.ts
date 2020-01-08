@@ -1,5 +1,6 @@
 /* tslint:disable:variable-name */
-import { Entity, Column, PrimaryGeneratedColumn, Unique, BeforeUpdate, BeforeInsert } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Unique, BeforeUpdate, BeforeInsert, OneToMany } from 'typeorm';
+import { RoomSender, IPublicRoomSender } from './room-sender.entity';
 
 @Entity()
 @Unique('name_subject', ['name', 'subject'])
@@ -20,6 +21,9 @@ export class Room {
   @Column()
   updated_at: Date;
 
+  @OneToMany(type => RoomSender, roomSender => roomSender.room_id, {cascade: true})
+  roomSenders: RoomSender[];
+
   @BeforeUpdate()
   beforeUpdate() {
     this.updated_at = new Date();
@@ -39,6 +43,7 @@ export class Room {
       name: this.name,
       subject: this.subject,
       timestamp: this.created_at.getTime(),
+      senders: this.roomSenders.map((s) => s.exportPublicAttributes()),
     };
   }
 
@@ -51,4 +56,5 @@ export interface IPublicRoom {
   name: string;
   subject: string;
   timestamp: number;
+  senders: IPublicRoomSender[];
 }

@@ -39,7 +39,7 @@ export class ApiController {
   @UseGuards(AuthGuard)
   async createRoom(@Param() params, @Body() createRoomDto: CreateRoomDto): Promise<IPublicRoom> {
     // TODO: only authorize the subject's user
-    return await this.apiService.createRoom(params.subjectName, {name: createRoomDto.name});
+    return await this.apiService.createRoom(params.subjectName, createRoomDto);
   }
 
   @Get('subjects/:subjectName/rooms/:roomName')

@@ -28,7 +28,6 @@ export class MessagesService {
       const messageEntity: Message = new Message();
       messageEntity.room_id = roomId;
       messageEntity.user = user;
-      messageEntity.sender = sender;
       messageEntity.message = message;
 
       // Insert
