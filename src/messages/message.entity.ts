@@ -1,18 +1,23 @@
 /* tslint:disable:variable-name */
-import { Entity, Column, PrimaryGeneratedColumn, Unique, BeforeUpdate, BeforeInsert } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, BeforeUpdate, BeforeInsert } from 'typeorm';
 
 @Entity()
-@Unique('name_subject', ['name', 'subject'])
-export class Room {
+export class Message {
 
   @PrimaryGeneratedColumn()
+  message_id: number;
+
+  @Column({type: 'numeric'})
   room_id: number;
 
-  @Column({length: 250})
-  name: string;
+  @Column({type: 'numeric'})
+  user: number;
 
   @Column({length: 250})
-  subject: string;
+  sender: string;
+
+  @Column({type: 'text'})
+  message: string;
 
   @Column()
   created_at: Date;
@@ -34,10 +39,10 @@ export class Room {
   /**
    * Export public entity. Only THAT entity can travel across the network.
    */
-  exportPublicAttributes(): IPublicRoom {
+  exportPublicAttributes(): IPublicMessage {
     return {
-      name: this.name,
-      subject: this.subject,
+      sender: this.sender,
+      message: this.message,
       timestamp: this.created_at.getTime(),
     };
   }
@@ -47,8 +52,8 @@ export class Room {
 /**
  * Public entity representing a room entity. Only THAT entity can travel across the network.
  */
-export interface IPublicRoom {
-  name: string;
-  subject: string;
+export interface IPublicMessage {
+  sender: string;
+  message: string;
   timestamp: number;
 }

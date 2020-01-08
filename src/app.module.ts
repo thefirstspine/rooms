@@ -8,10 +8,12 @@ import { RoomService } from './room/room.service';
 import env from './@shared/env-shared/env';
 import { Room } from './room/room.entity';
 import { SubjectsService } from './subjects/subjects.service';
+import { MessagesService } from './messages/messages.service';
+import { Message } from './messages/message.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Room]),
+    TypeOrmModule.forFeature([Room, Message]),
     TypeOrmModule.forRoot({
       type: 'postgres',
       synchronize: true,
@@ -30,6 +32,7 @@ import { SubjectsService } from './subjects/subjects.service';
     ApiService,
     RoomService,
     SubjectsService,
+    MessagesService,
   ],
 })
 export class AppModule {}
