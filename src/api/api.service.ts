@@ -5,6 +5,7 @@ import { IPublicRoom, Room } from '../room/room.entity';
 import { IPublicMessage, Message } from '../messages/message.entity';
 import { MessagesService } from '../messages/messages.service';
 import { IPublicRoomSender } from '../room/room-sender.entity';
+import { MessagingService } from '../messaging/messaging.service';
 
 /**
  * Main service to respond to API requests.
@@ -16,6 +17,7 @@ export class ApiService {
     private readonly roomService: RoomService,
     private readonly subjectsService: SubjectsService,
     private readonly messagesService: MessagesService,
+    private readonly messagingService: MessagingService,
   ) {}
 
   /**
@@ -113,6 +115,13 @@ export class ApiService {
     if (!messageCreated) {
       throw new HttpException('Message cannot be created', 400);
     }
+
+    // Notify messaging service
+    await this.messagingService.sendMessage(
+      room.roomSenders.map((s) => s.user),
+      `${MessagingService.SUBJECT__MESSAGE}:${roomName}`,
+      messageCreated.exportPublicAttributes(),
+    );
 
     // Return public entity
     return messageCreated.exportPublicAttributes();

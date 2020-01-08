@@ -11,6 +11,7 @@ import { SubjectsService } from './subjects/subjects.service';
 import { MessagesService } from './messages/messages.service';
 import { Message } from './messages/message.entity';
 import { RoomSender } from './room/room-sender.entity';
+import { MessagingService } from './messaging/messaging.service';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { RoomSender } from './room/room-sender.entity';
     RoomService,
     SubjectsService,
     MessagesService,
+    MessagingService,
   ],
 })
 export class AppModule {}
