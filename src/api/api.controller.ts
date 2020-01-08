@@ -39,19 +39,19 @@ export class ApiController {
   @UseGuards(AuthGuard)
   async createRoom(@Param() params, @Body() createRoomDto: CreateRoomDto): Promise<IPublicRoom> {
     // TODO: only authorize the subject's user
-    return await this.apiService.createRoom(params.subjectName, createRoomDto);
+    return this.apiService.createRoom(params.subjectName, createRoomDto);
   }
 
   @Get('subjects/:subjectName/rooms/:roomName')
   @UseGuards(AuthGuard)
   async getRoom(@Param() params): Promise<IPublicRoom> {
-    return await this.apiService.getRoom(params.subjectName, params.roomName);
+    return this.apiService.getRoom(params.subjectName, params.roomName);
   }
 
   @Post('subjects/:subjectName/rooms/:roomName/messages')
   @UseGuards(AuthGuard)
   async createMessage(@Req() req, @Param() params, @Body() createMessageDto: CreateMessageDto): Promise<IPublicMessage> {
-    return await this.apiService.createMessage(
+    return this.apiService.createMessage(
       params.subjectName,
       params.roomName,
       {user: req.user, sender: createMessageDto.message, message: createMessageDto.message});
@@ -60,7 +60,7 @@ export class ApiController {
   @Get('subjects/:subjectName/rooms/:roomName/messages')
   @UseGuards(AuthGuard)
   async getMessages(@Param() params): Promise<IPublicMessage[]> {
-    return await this.apiService.getMessages(params.subjectName, params.roomName);
+    return this.apiService.getMessages(params.subjectName, params.roomName);
   }
 
 }

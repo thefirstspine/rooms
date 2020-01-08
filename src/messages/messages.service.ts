@@ -34,7 +34,7 @@ export class MessagesService {
       const result: InsertResult = await this.messageRepository.insert(messageEntity);
 
       // Return the entity
-      return await this.messageRepository.findOne({message_id: result.identifiers[0].message_id});
+      return this.messageRepository.findOne({message_id: result.identifiers[0].message_id});
     } catch (e) {
       // Log error before returning something
       this.logService.error(e.message, {
@@ -51,6 +51,6 @@ export class MessagesService {
    * @param roomId
    */
   async getMessages(roomId: number): Promise<Message[]> {
-    return await this.messageRepository.find({room_id: roomId});
+    return this.messageRepository.find({room_id: roomId});
   }
 }
