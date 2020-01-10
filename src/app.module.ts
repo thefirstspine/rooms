@@ -11,7 +11,7 @@ import { SubjectsService } from './subjects/subjects.service';
 import { MessagesService } from './messages/messages.service';
 import { Message } from './messages/message.entity';
 import { RoomSender } from './room/room-sender.entity';
-import { MessagingService } from './messaging/messaging.service';
+import { MessagingService } from './@shared/messaging-shared/messaging.service';
 
 @Module({
   imports: [

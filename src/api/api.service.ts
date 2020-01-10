@@ -5,7 +5,7 @@ import { IPublicRoom, Room } from '../room/room.entity';
 import { IPublicMessage, Message } from '../messages/message.entity';
 import { MessagesService } from '../messages/messages.service';
 import { IPublicRoomSender } from '../room/room-sender.entity';
-import { MessagingService } from '../messaging/messaging.service';
+import { MessagingService } from '../@shared/messaging-shared/messaging.service';
 
 /**
  * Main service to respond to API requests.
@@ -119,7 +119,7 @@ export class ApiService {
     // Notify messaging service
     await this.messagingService.sendMessage(
       room.roomSenders.map((s) => s.user),
-      `${MessagingService.SUBJECT__MESSAGE}:${roomName}`,
+      `TheFirstSpine:messageRoom:${roomName}`,
       messageCreated.exportPublicAttributes(),
     );
 

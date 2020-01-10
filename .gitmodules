@@ -7,3 +7,6 @@
 [submodule "src/@shared/log-shared"]
 	path = src/@shared/log-shared
 	url = https://github.com/thefirstspine/log-shared
+[submodule "src/@shared/messaging-shared"]
+	path = src/@shared/messaging-shared
+	url = https://github.com/thefirstspine/messaging-shared
