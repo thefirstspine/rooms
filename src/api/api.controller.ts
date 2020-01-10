@@ -61,11 +61,21 @@ export class ApiController {
 
   @Post('subjects/:subjectName/rooms/:roomName/messages')
   @UseGuards(AuthGuard)
-  async createMessage(@Req() req, @Param() params, @Body() createMessageDto: CreateMessageDto): Promise<IPublicMessage> {
+  async createMessage(@Req() request: Request, @Param() params, @Body() createMessageDto: CreateMessageDto): Promise<IPublicMessage> {
+    // Only authorize the subject's owner
+    const jwt: string = request.headers.authorization.replace(/Bearer /, '');
+    const user: number = await this.authService.login(jwt);
+    const subject: ISubject = this.subjectsService.getSubject(params.subjectName);
+    const isOwner: boolean = user === subject.owner;
+
     return this.apiService.createMessage(
       params.subjectName,
       params.roomName,
-      {user: req.user, sender: createMessageDto.message, message: createMessageDto.message});
+      {
+        user: isOwner && createMessageDto.user ? createMessageDto.user : user,
+        sender: createMessageDto.message,
+        message: createMessageDto.message,
+      });
   }
 
   @Get('subjects/:subjectName/rooms/:roomName/messages')
