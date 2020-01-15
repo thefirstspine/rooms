@@ -1,8 +1,8 @@
-import { Controller, Get, UseGuards, Param, Post, Body, Req, HttpException } from '@nestjs/common';
+import { Controller, Get, UseGuards, Param, Post, Body, Req, HttpException, Query } from '@nestjs/common';
 import { AuthGuard } from '../@shared/auth-shared/auth.guard';
 import { IPublicRoom, Room } from '../room/room.entity';
 import { ISubject, SubjectsService } from '../subjects/subjects.service';
-import { ApiService } from './api.service';
+import { ApiService, IPaginedOptions, IPagined } from './api.service';
 import { CreateRoomDto } from './create-room.dto';
 import { CreateMessageDto } from './create-message.dto';
 import { IPublicMessage } from '../messages/message.entity';
@@ -80,8 +80,12 @@ export class ApiController {
 
   @Get('subjects/:subjectName/rooms/:roomName/messages')
   @UseGuards(AuthGuard)
-  async getMessages(@Param() params): Promise<IPublicMessage[]> {
-    return this.apiService.getMessages(params.subjectName, params.roomName);
+  async getMessages(@Param() params, @Query() query): Promise<IPagined<IPublicMessage>> {
+    const options: IPaginedOptions = {
+      limit: query.limit ? parseInt(query.limit, 10) : 10,
+      offset: query.offset ? parseInt(query.offset, 10) : 0,
+    };
+    return this.apiService.getMessages(params.subjectName, params.roomName, options);
   }
 
 }

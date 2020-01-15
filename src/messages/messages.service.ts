@@ -50,7 +50,20 @@ export class MessagesService {
    * Get the messages inside a room
    * @param roomId
    */
-  async getMessages(roomId: number): Promise<Message[]> {
-    return this.messageRepository.find({room_id: roomId});
+  async getMessages(roomId: number, skip: number, take: number): Promise<Message[]> {
+    return this.messageRepository.createQueryBuilder()
+      .where({room_id: roomId})
+      .skip(skip)
+      .take(take)
+      .orderBy({created_at: 'DESC'})
+      .getMany();
+  }
+
+  /**
+   * Get the messages inside a room
+   * @param roomId
+   */
+  async countMessages(roomId: number): Promise<number> {
+    return this.messageRepository.count({room_id: roomId});
   }
 }

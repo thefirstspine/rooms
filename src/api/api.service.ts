@@ -132,7 +132,7 @@ export class ApiService {
    * @param subjectName
    * @param roomName
    */
-  async getMessages(subjectName: string, roomName: string): Promise<IPublicMessage[]> {
+  async getMessages(subjectName: string, roomName: string, options: IPaginedOptions): Promise<IPagined<IPublicMessage>> {
     this.getSubject(subjectName); // test the subject existence
 
     // Test the room
@@ -141,8 +141,24 @@ export class ApiService {
       throw new HttpException('Room does not exist', 404);
     }
 
-    const messages: Message[] = await this.messagesService.getMessages(room.room_id);
-    return messages.map((m) => m.exportPublicAttributes());
+    const messages: Message[] = await this.messagesService.getMessages(room.room_id, options.offset, options.limit);
+    const count: number = await this.messagesService.countMessages(room.room_id);
+    return {
+      count,
+      offset: options.offset,
+      limit: options.limit,
+      data: messages.map((m) => m.exportPublicAttributes()),
+    };
   }
 
+}
+
+export interface IPaginedOptions {
+  offset: number;
+  limit: number;
+}
+
+export interface IPagined<T> extends IPaginedOptions {
+  count: number;
+  data: T[];
 }
