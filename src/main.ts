@@ -9,6 +9,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new ErrorFilter(new LogService('rooms')));
   app.useGlobalPipes(new ValidationPipe());
+  app.enableCors();
   await app.listen(env.dist ? env.config.ROOMS_PORT : 2505);
 }
 bootstrap();
