@@ -12,6 +12,7 @@ import { MessagesService } from './messages/messages.service';
 import { Message } from './messages/message.entity';
 import { RoomSender } from './room/room-sender.entity';
 import { MessagingService } from './@shared/messaging-shared/messaging.service';
+import { IndexController } from './index/index.controller';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { MessagingService } from './@shared/messaging-shared/messaging.service';
       database: env.config.PG_DATABASE,
     }),
   ],
-  controllers: [ApiController],
+  controllers: [ApiController, IndexController],
   providers: [
     AuthService,
     {provide: LogService, useValue: new LogService('rooms')},
