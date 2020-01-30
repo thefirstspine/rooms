@@ -12,7 +12,7 @@ export class SubjectsService {
    * Get the available subjects. They are stored in the environment config.
    */
   getSubjects(): ISubject[] {
-    const config: string = env.config.ROOMS_SUBJECTS;
+    const config: string = env.config.SUBJECTS;
     return config.split(',').map((s: string) => {
       const subject: string[] = s.split(':');
       return {
