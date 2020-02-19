@@ -17,7 +17,6 @@ export class SubjectsService {
       const subject: string[] = s.split(':');
       return {
         name: subject[0],
-        owner: parseInt(subject[1], 10),
       };
     });
   }
@@ -38,5 +37,4 @@ export class SubjectsService {
  */
 export interface ISubject {
   name: string;
-  owner: number;
 }
