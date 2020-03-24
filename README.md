@@ -1,7 +1,3 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="platform.png" width="320" alt="Platform Logo" /></a>
-</p>
-
 ## About
 
 The `rooms` service will manage discussions between players inside rooms, contained in subjects.
