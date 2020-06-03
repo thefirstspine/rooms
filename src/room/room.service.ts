@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Room } from './room.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, InsertResult } from 'typeorm';
-import { LogService } from '../@shared/log-shared/log.service';
 import { IPublicRoomSender, RoomSender } from './room-sender.entity';
+import { LogsService } from '@thefirstspine/logs-nest';
 
 /**
  * Service to manage rooms. Room is a space where users can post messages.
@@ -18,7 +18,7 @@ export class RoomService {
     private readonly roomRepository: Repository<Room>,
     @InjectRepository(RoomSender)
     private readonly roomSenderRepository: Repository<RoomSender>,
-    private readonly logService: LogService,
+    private readonly logsService: LogsService,
   ) {}
 
   /**
@@ -75,7 +75,7 @@ export class RoomService {
       return this.roomRepository.findOne({room_id: roomId}, {relations: ['roomSenders']});
     } catch (e) {
       // Log error before returning something
-      this.logService.error(e.message, {
+      this.logsService.error(e.message, {
         message: e.message,
         name: e.name,
         stack: e.stack,

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Message } from './message.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, InsertResult } from 'typeorm';
-import { LogService } from '../@shared/log-shared/log.service';
+import { LogsService } from '@thefirstspine/logs-nest';
 
 /**
  * Main messages service. A message is a user's post in a room.
@@ -12,7 +12,7 @@ export class MessagesService {
   constructor(
     @InjectRepository(Message)
     private readonly messageRepository: Repository<Message>,
-    private readonly logService: LogService,
+    private readonly logsService: LogsService,
   ) {}
 
   /**
@@ -37,7 +37,7 @@ export class MessagesService {
       return this.messageRepository.findOne({message_id: result.identifiers[0].message_id});
     } catch (e) {
       // Log error before returning something
-      this.logService.error(e.message, {
+      this.logsService.error(e.message, {
         message: e.message,
         name: e.name,
         stack: e.stack,

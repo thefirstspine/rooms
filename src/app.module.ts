@@ -12,6 +12,7 @@ import { RoomSender } from './room/room-sender.entity';
 import { MessagingService } from './@shared/messaging-shared/messaging.service';
 import { IndexController } from './index/index.controller';
 import { AuthService } from '@thefirstspine/auth-nest';
+import { LogsService } from '@thefirstspine/logs-nest';
 
 @Module({})
 export class AppModule {
@@ -36,6 +37,7 @@ export class AppModule {
       providers: [
         AuthService,
         {provide: LogService, useValue: new LogService('rooms')},
+        LogsService,
         ApiService,
         RoomService,
         SubjectsService,
