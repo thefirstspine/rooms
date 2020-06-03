@@ -2,7 +2,6 @@ import { Module, DynamicModule } from '@nestjs/common';
 import { LogService } from './@shared/log-shared/log.service';
 import { ApiController } from './api/api.controller';
 import { ApiService } from './api/api.service';
-import { AuthService } from './@shared/auth-shared/auth.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoomService } from './room/room.service';
 import { Room } from './room/room.entity';
@@ -12,6 +11,7 @@ import { Message } from './messages/message.entity';
 import { RoomSender } from './room/room-sender.entity';
 import { MessagingService } from './@shared/messaging-shared/messaging.service';
 import { IndexController } from './index/index.controller';
+import { AuthService } from '@thefirstspine/auth-nest';
 
 @Module({})
 export class AppModule {
