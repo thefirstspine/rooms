@@ -5,7 +5,7 @@ import { IPublicRoom, Room } from '../room/room.entity';
 import { IPublicMessage, Message } from '../messages/message.entity';
 import { MessagesService } from '../messages/messages.service';
 import { IPublicRoomSender } from '../room/room-sender.entity';
-import { MessagingService } from '../@shared/messaging-shared/messaging.service';
+import { MessagingService } from '@thefirstspine/messaging-nest';
 
 /**
  * Main service to respond to API requests.

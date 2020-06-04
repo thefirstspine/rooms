@@ -26,6 +26,7 @@
     "@nestjs/typeorm": "^7.0.0",
     "@thefirstspine/auth-nest": "^1.0.0",
     "@thefirstspine/logs-nest": "0.0.1",
+    "@thefirstspine/messaging-nest": "0.0.1",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.11.1",
     "dotenv": "^8.2.0",
