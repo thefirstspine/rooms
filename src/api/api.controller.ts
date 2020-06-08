@@ -6,7 +6,7 @@ import { CreateRoomDto } from './create-room.dto';
 import { CreateMessageDto } from './create-message.dto';
 import { IPublicMessage } from '../messages/message.entity';
 import { Request } from 'express';
-import { CertificateGuard } from '../certificate.guard';
+import { CertificateGuard } from '@thefirstspine/certificate-nest';
 import { AuthService, AuthGuard } from '@thefirstspine/auth-nest';
 
 /**
