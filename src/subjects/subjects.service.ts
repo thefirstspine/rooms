@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import env from '../@shared/env-shared/env';
 
 /**
  * Main subjects services. Subjects are the top-levels items in the rooms architecture,
@@ -12,7 +11,7 @@ export class SubjectsService {
    * Get the available subjects. They are stored in the environment config.
    */
   getSubjects(): ISubject[] {
-    const config: string = env.config.SUBJECTS;
+    const config: string = process.env.SUBJECTS;
     return config.split(',').map((s: string) => {
       const subject: string[] = s.split(':');
       return {
