@@ -9,6 +9,8 @@ import { Request } from 'express';
 import { CertificateGuard } from '@thefirstspine/certificate-nest';
 import { AuthService, AuthGuard } from '@thefirstspine/auth-nest';
 import { CreateMessageSecureDto } from './create-message-secure.dto';
+import { IPublicRoomSender } from 'src/room/room-sender.entity';
+import { AddRoomSenderDto } from './add-room-sender.dto';
 
 /**
  * Main public controller.
@@ -79,6 +81,25 @@ export class ApiController {
   @UseGuards(AuthGuard)
   async getRoom(@Param() params): Promise<IPublicRoom> {
     return this.apiService.getRoom(params.subjectName, params.roomName);
+  }
+
+  /**
+   * Endpoint POST /api/subjects/:subjectName/rooms/:roomName/senders
+   * Require a public certificate
+   * Add a sender in a room.
+   * @param params
+   * @param addRoomSenderDto
+   */
+  @Post('subjects/:subjectName/rooms/:roomName/senders')
+  @UseGuards(CertificateGuard)
+  async addRoomSender(@Param() params, @Body() addRoomSenderDto: AddRoomSenderDto): Promise<IPublicRoom> {
+    return this.apiService.addRoomSender(
+      params.subjectName,
+      params.roomName,
+      {
+        displayName: addRoomSenderDto.displayName,
+        user: addRoomSenderDto.user,
+      });
   }
 
   /**

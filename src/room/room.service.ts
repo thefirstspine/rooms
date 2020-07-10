@@ -46,11 +46,25 @@ export class RoomService {
   }
 
   /**
+   * Get a room with a subject and its name.
+   * @param subject
+   */
+  async addRoomSender(id: number, sender: {user: number, displayName: string}): Promise<Room> {
+    const roomSender: RoomSender = new RoomSender();
+    roomSender.user = sender.user;
+    roomSender.display_name = sender.displayName;
+    roomSender.room_id = id;
+    await this.roomSenderRepository.insert(roomSender);
+
+    return this.getRoomWithId(id);
+  }
+
+  /**
    * Create a room
    * @param subject
    * @param name
    */
-  async createRoom(subject: string, name: string, senders: IPublicRoomSender[]): Promise<Room|null> {
+  async createRoom(subject: string, name: string, senders: Array<{user: number, displayName: string}>): Promise<Room|null> {
     try {
       // Create room
       const room: Room = new Room();
@@ -62,7 +76,7 @@ export class RoomService {
       const roomId: number = result.identifiers[0].room_id;
 
       // Create senders
-      const promises: Array<Promise<InsertResult>> = senders.map((sender: IPublicRoomSender) => {
+      const promises: Array<Promise<InsertResult>> = senders.map((sender: {user: number, displayName: string}) => {
         const roomSender: RoomSender = new RoomSender();
         roomSender.user = sender.user;
         roomSender.display_name = sender.displayName;

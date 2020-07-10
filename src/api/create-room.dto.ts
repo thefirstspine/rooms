@@ -8,6 +8,6 @@ export class CreateRoomDto {
 
   @IsNotEmpty()
   @IsArray()
-  senders: IPublicRoomSender[];
+  senders: Array<{user: number, displayName: string}>;
 
 }

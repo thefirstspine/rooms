@@ -59,7 +59,7 @@ export class ApiService {
     subjectName: string,
     room: {
       name: string,
-      senders: IPublicRoomSender[],
+      senders: Array<{user: number, displayName: string}>,
     }): Promise<IPublicRoom> {
     this.getSubject(subjectName); // test the subject existence
 
@@ -89,6 +89,26 @@ export class ApiService {
 
     // Return public entity
     return room.exportPublicAttributes();
+  }
+
+  /**
+   * Get the room for a given subject
+   * @param subjectName
+   * @param room
+   */
+  async addRoomSender(subjectName: string, roomName: string, sender: {user: number, displayName: string}): Promise<IPublicRoom> {
+    this.getSubject(subjectName); // test the subject existence
+
+    // Test the room
+    const room: Room|undefined = await this.roomService.getRoomWithSubjectAndName(subjectName, roomName);
+    if (!room) {
+      throw new HttpException('Room does not exist', 404);
+    }
+
+    // Add the sender
+    await this.roomService.addRoomSender(room.room_id, sender);
+
+    return (await this.roomService.getRoomWithSubjectAndName(subjectName, roomName)).exportPublicAttributes();
   }
 
   /**
