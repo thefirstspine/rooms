@@ -22,7 +22,7 @@ export class MessagesService {
    * @param sender
    * @param message
    */
-  async createMessage(roomId: number, user: number, sender: string, message: string): Promise<Message> {
+  async createMessage(roomId: number, user: number, message: string): Promise<Message> {
     try {
       // Create
       const messageEntity: Message = new Message();

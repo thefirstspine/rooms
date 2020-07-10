@@ -63,7 +63,6 @@ export class ApiController {
       params.roomName,
       {
         user,
-        sender: createMessageDto.message,
         message: createMessageDto.message,
       });
   }
@@ -76,7 +75,6 @@ export class ApiController {
       params.roomName,
       {
         user: createMessageDto.user,
-        sender: createMessageDto.message,
         message: createMessageDto.message,
       });
   }

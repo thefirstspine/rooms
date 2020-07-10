@@ -100,7 +100,7 @@ export class ApiService {
   async createMessage(
     subjectName: string,
     roomName: string,
-    message: {user: number, sender: string, message: string}): Promise<IPublicMessage> {
+    message: {user: number, message: string}): Promise<IPublicMessage> {
     this.getSubject(subjectName); // test the subject existence
 
     // Test the room
@@ -111,7 +111,7 @@ export class ApiService {
 
     // Create the room & test
     const messageCreated: Message|null =
-      await this.messagesService.createMessage(room.room_id, message.user, message.sender, message.message);
+      await this.messagesService.createMessage(room.room_id, message.user, message.message);
     if (!messageCreated) {
       throw new HttpException('Message cannot be created', 400);
     }
