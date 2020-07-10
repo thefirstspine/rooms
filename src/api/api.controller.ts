@@ -19,39 +19,76 @@ export class ApiController {
   constructor(
     private readonly apiService: ApiService,
     private readonly authService: AuthService,
-    private readonly subjectsService: SubjectsService,
   ) {}
 
+  /**
+   * Endpoint GET /api/subjects
+   * Require an access token
+   * Get all the subjects
+   */
   @Get('subjects')
   @UseGuards(AuthGuard)
   async getSubject(): Promise<ISubject[]> {
     return this.apiService.getSubjects();
   }
 
+  /**
+   * Endpoint GET /api/subjects/:subjectName
+   * Require an access token
+   * Get details on a subject
+   * @param params
+   */
   @Get('subjects/:subjectName')
   @UseGuards(AuthGuard)
   async getSubjects(@Param() params): Promise<ISubject> {
     return this.apiService.getSubject(params.subjectName);
   }
 
+  /**
+   * Endpoint GET /api/subjects/:subjectName/rooms
+   * Require an access token
+   * Get rooms in a subject
+   * @param params
+   */
   @Get('subjects/:subjectName/rooms')
   @UseGuards(AuthGuard)
   async getRooms(@Param() params): Promise<IPublicRoom[]> {
     return this.apiService.getRooms(params.subjectName);
   }
 
+  /**
+   * Endpoint POST /api/subjects/:subjectName/rooms
+   * Require a public certificate
+   * Create a room in a subject.
+   * @param params
+   * @param createRoomDto
+   */
   @Post('subjects/:subjectName/rooms')
   @UseGuards(CertificateGuard)
   async createRoom(@Param() params, @Body() createRoomDto: CreateRoomDto): Promise<IPublicRoom> {
     return this.apiService.createRoom(params.subjectName, createRoomDto);
   }
 
+  /**
+   * Endpoint GET /api/subjects/:subjectName/rooms/:roomName
+   * Require an access token
+   * Get details of a room.
+   * @param params
+   */
   @Get('subjects/:subjectName/rooms/:roomName')
   @UseGuards(AuthGuard)
   async getRoom(@Param() params): Promise<IPublicRoom> {
     return this.apiService.getRoom(params.subjectName, params.roomName);
   }
 
+  /**
+   * Endpoint POST /api/subjects/:subjectName/rooms/:roomName/messages
+   * Require an access token
+   * Create a message in a room.
+   * @param request
+   * @param params
+   * @param createMessageDto
+   */
   @Post('subjects/:subjectName/rooms/:roomName/messages')
   @UseGuards(AuthGuard)
   async createMessage(@Req() request: Request, @Param() params, @Body() createMessageDto: CreateMessageDto): Promise<IPublicMessage> {
@@ -68,6 +105,13 @@ export class ApiController {
       });
   }
 
+  /**
+   * Endpoint POST /api/subjects/:subjectName/rooms/:roomName/messages/secure
+   * Require a public certificate
+   * Create a message in a room on behalf of a user.
+   * @param params
+   * @param createMessageDto
+   */
   @Post('subjects/:subjectName/rooms/:roomName/messages/secure')
   @UseGuards(CertificateGuard)
   async createMessageSecure(@Param() params, @Body() createMessageDto: CreateMessageSecureDto): Promise<IPublicMessage> {
@@ -80,6 +124,13 @@ export class ApiController {
       });
   }
 
+  /**
+   * Endpoint GET /api/subjects/:subjectName/rooms/:roomName/messages
+   * Require an access token
+   * Get the messages in a room.
+   * @param params
+   * @param query
+   */
   @Get('subjects/:subjectName/rooms/:roomName/messages')
   @UseGuards(AuthGuard)
   async getMessages(@Param() params, @Query() query): Promise<IPagined<IPublicMessage>> {
