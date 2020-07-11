@@ -1,6 +1,6 @@
-import { Controller, Get, UseGuards, Param, Post, Body, Req, Query } from '@nestjs/common';
-import { IPublicRoom, Room } from '../room/room.entity';
-import { ISubject, SubjectsService } from '../subjects/subjects.service';
+import { Controller, Get, UseGuards, Param, Post, Body, Req, Query, Delete } from '@nestjs/common';
+import { IPublicRoom } from '../room/room.entity';
+import { ISubject } from '../subjects/subjects.service';
 import { ApiService, IPaginedOptions, IPagined } from './api.service';
 import { CreateRoomDto } from './create-room.dto';
 import { CreateMessageDto } from './create-message.dto';
@@ -9,7 +9,6 @@ import { Request } from 'express';
 import { CertificateGuard } from '@thefirstspine/certificate-nest';
 import { AuthService, AuthGuard } from '@thefirstspine/auth-nest';
 import { CreateMessageSecureDto } from './create-message-secure.dto';
-import { IPublicRoomSender } from 'src/room/room-sender.entity';
 import { AddRoomSenderDto } from './add-room-sender.dto';
 
 /**
@@ -100,6 +99,15 @@ export class ApiController {
         displayName: addRoomSenderDto.displayName,
         user: addRoomSenderDto.user,
       });
+  }
+
+  @Delete('subjects/:subjectName/rooms/:roomName/senders/:user')
+  @UseGuards(CertificateGuard)
+  async deleteRoomSender(@Param() params): Promise<IPublicRoom> {
+    return this.apiService.deleteRoomSender(
+      params.subjectName,
+      params.roomName,
+      parseInt(params.user, 10));
   }
 
   /**

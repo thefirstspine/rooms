@@ -60,6 +60,20 @@ export class RoomService {
   }
 
   /**
+   * Delete a user in a room
+   * @param id
+   * @param user
+   */
+  async deleteRoomSender(id: number, user: number): Promise<Room> {
+    await this.roomSenderRepository.delete({
+      user,
+      room_id: id,
+    });
+
+    return this.getRoomWithId(id);
+  }
+
+  /**
    * Create a room
    * @param subject
    * @param name

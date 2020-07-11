@@ -4,7 +4,7 @@ import { SubjectsService, ISubject } from '../subjects/subjects.service';
 import { IPublicRoom, Room } from '../room/room.entity';
 import { IPublicMessage, Message } from '../messages/message.entity';
 import { MessagesService } from '../messages/messages.service';
-import { IPublicRoomSender } from '../room/room-sender.entity';
+import { RoomSender } from '../room/room-sender.entity';
 import { MessagingService } from '@thefirstspine/messaging-nest';
 
 /**
@@ -92,9 +92,10 @@ export class ApiService {
   }
 
   /**
-   * Get the room for a given subject
+   * Add a sender in a given room, in a given subject
    * @param subjectName
    * @param room
+   * @param sender
    */
   async addRoomSender(subjectName: string, roomName: string, sender: {user: number, displayName: string}): Promise<IPublicRoom> {
     this.getSubject(subjectName); // test the subject existence
@@ -107,6 +108,32 @@ export class ApiService {
 
     // Add the sender
     await this.roomService.addRoomSender(room.room_id, sender);
+
+    return (await this.roomService.getRoomWithSubjectAndName(subjectName, roomName)).exportPublicAttributes();
+  }
+
+  /**
+   * Delete a sender in a given room, in a given subject
+   * @param subjectName
+   * @param room
+   * @param sender
+   */
+  async deleteRoomSender(subjectName: string, roomName: string, user: number): Promise<IPublicRoom> {
+    this.getSubject(subjectName); // test the subject existence
+
+    // Test the room
+    const room: Room|undefined = await this.roomService.getRoomWithSubjectAndName(subjectName, roomName);
+    if (!room) {
+      throw new HttpException('Room does not exist', 404);
+    }
+
+    // Check the sender is not in the room actually
+    if (!room.roomSenders.find((s: RoomSender) => s.user === user)) {
+      throw new HttpException('Sender not in the room', 400);
+    }
+
+    // Add the sender
+    await this.roomService.deleteRoomSender(room.room_id, user);
 
     return (await this.roomService.getRoomWithSubjectAndName(subjectName, roomName)).exportPublicAttributes();
   }
