@@ -106,6 +106,11 @@ export class ApiService {
       throw new HttpException('Room does not exist', 404);
     }
 
+    // Check the sender is not in the room actually
+    if (room.roomSenders.find((s: RoomSender) => s.user === sender.user)) {
+      throw new HttpException('Sender is already in the room', 400);
+    }
+
     // Add the sender
     await this.roomService.addRoomSender(room.room_id, sender);
 
