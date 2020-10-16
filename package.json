@@ -28,7 +28,7 @@
     "@thefirstspine/certificate-nest": "0.0.4",
     "@thefirstspine/logs-nest": "1.0.0",
     "@thefirstspine/messaging-nest": "1.0.0",
-    "class-transformer": "^0.2.3",
+    "class-transformer": "^0.3.1",
     "class-validator": "^0.11.1",
     "dotenv": "^8.2.0",
     "node-fetch": "^2.6.1",
