@@ -170,7 +170,7 @@ export class ApiService {
 
     // Notify messaging service
     await this.messagingService.sendMessage(
-      room.roomSenders.map((s) => s.user),
+      '*',
       `TheFirstSpine:messageRoom:${roomName}`,
       messageCreated.exportPublicAttributes(),
     );
