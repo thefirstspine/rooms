@@ -34,7 +34,7 @@ export class RoomService {
    * @param subject
    */
   async getRoomWithSubjectAndName(subject: string, name: string): Promise<Room> {
-    return this.roomRepository.findOne({subject, name}, {relations: ['roomSenders']});
+    return this.roomRepository.findOne({where: {subject, name}, relations: ['roomSenders']});
   }
 
   /**
@@ -42,7 +42,7 @@ export class RoomService {
    * @param subject
    */
   async getRoomWithId(id: number): Promise<Room> {
-    return this.roomRepository.findOne({room_id: id}, {relations: ['roomSenders']});
+    return this.roomRepository.findOne({where: {room_id: id}, relations: ['roomSenders']});
   }
 
   /**
@@ -100,7 +100,7 @@ export class RoomService {
       await Promise.all(promises);
 
       // Return the entity
-      return this.roomRepository.findOne({room_id: roomId}, {relations: ['roomSenders']});
+      return this.roomRepository.findOne({where: {room_id: roomId}, relations: ['roomSenders']});
     } catch (e) {
       // Log error before returning something
       this.logsService.error(e.message, {

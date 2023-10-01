@@ -34,7 +34,7 @@ export class MessagesService {
       const result: InsertResult = await this.messageRepository.insert(messageEntity);
 
       // Return the entity
-      return this.messageRepository.findOne({message_id: result.identifiers[0].message_id});
+      return this.messageRepository.findOne({where: {message_id: result.identifiers[0].message_id}});
     } catch (e) {
       // Log error before returning something
       this.logsService.error(e.message, {
@@ -64,6 +64,6 @@ export class MessagesService {
    * @param roomId
    */
   async countMessages(roomId: number): Promise<number> {
-    return this.messageRepository.count({room_id: roomId});
+    return this.messageRepository.count({where: {room_id: roomId}});
   }
 }
