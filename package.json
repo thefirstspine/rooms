@@ -25,7 +25,7 @@
     "@nestjs/platform-express": "^10.2.10",
     "@nestjs/typeorm": "^10.0.1",
     "@thefirstspine/auth-nest": "^2.4.4",
-    "@thefirstspine/certificate-nest": "1.0.3",
+    "@thefirstspine/certificate-nest": "1.0.4",
     "@thefirstspine/logs-nest": "6.0.0",
     "@thefirstspine/messaging-nest": "2.0.0",
     "class-transformer": "^0.5.1",
