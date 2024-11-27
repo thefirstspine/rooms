@@ -175,7 +175,7 @@ export class ApiService {
     }
 
     // Notify messaging service
-    this.logsService.error(
+    this.logsService.info(
       "Send message to messaging clients",
       { subject: `TheFirstSpine:messageRoom:${roomName}`, message: messageCreated.exportPublicAttributes() },
     );
