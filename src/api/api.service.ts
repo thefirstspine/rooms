@@ -6,6 +6,7 @@ import { IPublicMessage, Message } from '../messages/message.entity';
 import { MessagesService } from '../messages/messages.service';
 import { RoomSender } from '../room/room-sender.entity';
 import { MessagingService } from '@thefirstspine/messaging-nest';
+import { LogsService } from '@thefirstspine/logs-nest';
 
 /**
  * Main service to respond to API requests.
@@ -18,6 +19,7 @@ export class ApiService {
     private readonly subjectsService: SubjectsService,
     private readonly messagesService: MessagesService,
     private readonly messagingService: MessagingService,
+    private readonly logsService: LogsService,
   ) {}
 
   /**
@@ -153,11 +155,14 @@ export class ApiService {
     subjectName: string,
     roomName: string,
     message: {user: number, message: string}): Promise<IPublicMessage> {
+    
+    this.logsService.info("Create message in room", { subjectName, roomName, message });
     this.getSubject(subjectName); // test the subject existence
 
     // Test the room
     const room: Room|undefined = await this.roomService.getRoomWithSubjectAndName(subjectName, roomName);
     if (!room) {
+      this.logsService.error("Room doesn't exist", { subjectName, roomName, message });
       throw new HttpException('Room does not exist', 404);
     }
 
@@ -165,10 +170,15 @@ export class ApiService {
     const messageCreated: Message|null =
       await this.messagesService.createMessage(room.room_id, message.user, message.message);
     if (!messageCreated) {
+      this.logsService.error("Message cannot be created", { subjectName, roomName, message });
       throw new HttpException('Message cannot be created', 400);
     }
 
     // Notify messaging service
+    this.logsService.info(
+      "Send message to messaging clients",
+      { subject: `TheFirstSpine:messageRoom:${roomName}`, message: messageCreated.exportPublicAttributes() },
+    );
     await this.messagingService.sendMessage(
       '*',
       `TheFirstSpine:messageRoom:${roomName}`,
